@@ -6,6 +6,11 @@
 // GLFW
 #include <GLFW/glfw3.h>
 
+void key_cb(GLFWwindow *window, int key, int scancode, int action, int mode) {
+    if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
+        glfwSetWindowShouldClose(window, GL_TRUE);
+}
+
 int main() {
     std::cout << "Starting GLFW context, OpenGL 3.3" << std::endl;
     glfwInit();
@@ -33,6 +38,8 @@ int main() {
     int width, height;
     glfwGetFramebufferSize(window, &width, &height);
     glViewport(0, 0, width, height);
+
+    glfwSetKeyCallback(window, key_cb);
 
     while (!glfwWindowShouldClose(window)) {
         glfwPollEvents();
