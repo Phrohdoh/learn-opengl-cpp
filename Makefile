@@ -14,7 +14,9 @@ help:
 	@echo ""
 
 build: main.cpp
+	@echo "Building main.cpp"
 	@clang++ main.cpp -lglfw3 -framework Cocoa -framework OpenGL -framework IOKit -framework CoreVideo -framework Carbon -lGLEW -o a.out
 
 run: build
+	@echo "Running a.out"
 	@./a.out
