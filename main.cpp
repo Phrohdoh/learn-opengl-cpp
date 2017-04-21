@@ -14,7 +14,7 @@ const GLchar *vertexShaderSource = "#version 330 core\n"
                                    "layout (location = 0) in vec3 position; void main() { gl_Position = vec4(position.x, position.y, position.z, 1.0); }";
 
 const GLchar *fragmentShaderSource = "#version 330 core\n"
-                                     "layout (location = 0) out vec4 color; void main() { color = vec4(1.0f, 0.5f, 0.2f, 1.0f); }";
+                                     "layout (location = 0) out vec4 color; void main() { color = vec4(0.0f, 0.7f, 0.2f, 1.0f); }";
 
 int main()
 {
