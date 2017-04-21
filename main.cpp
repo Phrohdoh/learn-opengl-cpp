@@ -56,12 +56,17 @@ int main()
         GLint success;
         GLchar infoLog[512];
         glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
+        glGetShaderInfoLog(vertexShader, 512, nullptr, infoLog);
 
-        if (!success)
+        if (infoLog != nullptr && infoLog[0] != 0)
         {
-            glGetShaderInfoLog(vertexShader, 512, nullptr, infoLog);
-            std::cout << "Vertex shader compilation failed!\n"
-                      << infoLog << std::endl;
+            if (!success)
+            {
+                std::cout << "Vertex shader compilation failed!\n"
+                          << std::endl;
+            }
+
+            std::cout << "Vertex shader info: " << infoLog << std::endl;
         }
     }
 
@@ -74,12 +79,17 @@ int main()
         GLint success;
         GLchar infoLog[512];
         glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
+        glGetShaderInfoLog(fragmentShader, 512, nullptr, infoLog);
 
-        if (!success)
+        if (infoLog != nullptr && infoLog[0] != 0)
         {
-            glGetShaderInfoLog(fragmentShader, 512, nullptr, infoLog);
-            std::cout << "Fragment shader compilation failed!\n"
-                      << infoLog << std::endl;
+            if (!success)
+            {
+                std::cout << "Fragment shader compilation failed!\n"
+                          << std::endl;
+            }
+
+            std::cout << "Fragment shader info: " << infoLog << std::endl;
         }
     }
 
@@ -93,12 +103,17 @@ int main()
         GLint success;
         GLchar infoLog[512];
         glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
+        glGetProgramInfoLog(shaderProgram, 512, nullptr, infoLog);
 
-        if (!success)
+        if (infoLog != nullptr && infoLog[0] != 0)
         {
-            glGetProgramInfoLog(shaderProgram, 512, nullptr, infoLog);
-            std::cout << "Program linking failed!\n"
-                      << infoLog << std::endl;
+            if (!success)
+            {
+                std::cout << "Program linking failed!\n"
+                          << std::endl;
+            }
+
+            std::cout << "Program linking info: " << infoLog << std::endl;
         }
     }
 
