@@ -10,8 +10,11 @@ void key_cb(GLFWwindow *window, int key, int scancode, int action, int mode)
         glfwSetWindowShouldClose(window, GL_TRUE);
 }
 
-const GLchar *vertexShaderSource = "#version 330 core\n"
-                                   "layout (location = 0) in vec3 position; void main() { gl_Position = vec4(position.x, position.y, position.z, 1.0); }";
+const GLchar *vertexShaderSource =
+    "#version 330\n"
+    "layout (location = 0) in vec3 pos3;"
+    "uniform mat4 matf4;"
+    "void main() { gl_Position = matf4 * vec4(pos3, 1.0); }";
 
 const GLchar *fragmentShaderSource = "#version 330 core\n"
                                      "layout (location = 0) out vec4 color; void main() { color = vec4(0.0f, 0.7f, 0.2f, 1.0f); }";
@@ -58,7 +61,7 @@ int main()
         glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
         glGetShaderInfoLog(vertexShader, 512, nullptr, infoLog);
 
-        if (infoLog != nullptr && infoLog[0] != 0)
+        if (infoLog[0] != 0)
         {
             if (!success)
             {
@@ -81,7 +84,7 @@ int main()
         glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
         glGetShaderInfoLog(fragmentShader, 512, nullptr, infoLog);
 
-        if (infoLog != nullptr && infoLog[0] != 0)
+        if (infoLog[0] != 0)
         {
             if (!success)
             {
@@ -105,7 +108,7 @@ int main()
         glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
         glGetProgramInfoLog(shaderProgram, 512, nullptr, infoLog);
 
-        if (infoLog != nullptr && infoLog[0] != 0)
+        if (infoLog[0] != 0)
         {
             if (!success)
             {
@@ -144,6 +147,13 @@ int main()
 
     glBindVertexArray(0);
 
+    GLfloat mat[] = {
+        1.0, 0.0, 0.0, 0.0,
+        0.0, 1.0, 0.0, 0.0,
+        0.0, 0.0, 1.0, 0.0,
+        0.0, 0.0, 0.0, 1.0,
+    };
+
     while (!glfwWindowShouldClose(window))
     {
         glfwPollEvents();
@@ -152,6 +162,9 @@ int main()
         glClear(GL_COLOR_BUFFER_BIT);
 
         glUseProgram(shaderProgram);
+        auto loc = glGetUniformLocation(shaderProgram, "matf4");
+        glUniformMatrix4fv(loc, 1, false, (GLfloat const *)&mat);
+
         glBindVertexArray(VAO);
         glDrawArrays(GL_TRIANGLES, 0, 3);
         glBindVertexArray(0);
