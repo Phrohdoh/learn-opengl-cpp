@@ -13,8 +13,13 @@ void key_cb(GLFWwindow *window, int key, int scancode, int action, int mode)
 const GLchar *vertexShaderSource =
     "#version 330\n"
     "layout (location = 0) in vec3 pos3;"
+    "uniform float v;"
     "uniform mat4 matf4;"
-    "void main() { gl_Position = matf4 * vec4(pos3, 1.0); }";
+    "void main() {"
+    "  vec3 pos = pos3;"
+    "  pos.x += v;"
+    "  gl_Position = matf4 * vec4(pos, 1.0);"
+    "}";
 
 const GLchar *fragmentShaderSource = "#version 330 core\n"
                                      "layout (location = 0) out vec4 color; void main() { color = vec4(0.0f, 0.7f, 0.2f, 1.0f); }";
@@ -154,16 +159,28 @@ int main()
         0.0, 0.0, 0.0, 1.0,
     };
 
+    auto v = -0.5f;
+
     while (!glfwWindowShouldClose(window))
     {
+        v += 0.002;
+
+        if (v > 0.5) {
+            v = -0.5;
+        }
+
         glfwPollEvents();
 
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
         glUseProgram(shaderProgram);
-        auto loc = glGetUniformLocation(shaderProgram, "matf4");
-        glUniformMatrix4fv(loc, 1, false, (GLfloat const *)&mat);
+
+        auto loc_matf4 = glGetUniformLocation(shaderProgram, "matf4");
+        glUniformMatrix4fv(loc_matf4, 1, false, (GLfloat const *)&mat);
+
+        auto loc_v = glGetUniformLocation(shaderProgram, "v");
+        glUniform1f(loc_v, v);
 
         glBindVertexArray(VAO);
         glDrawArrays(GL_TRIANGLES, 0, 3);
